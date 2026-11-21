@@ -77,7 +77,7 @@ window.PROJECTS = [
     accent: "#16a34a",
     image: null,
     summary:
-      "A lightweight, smartphone-based system for recording live sports matches, from soccer to rugby, using multiple volunteer devices. Spectators join a game session by scanning a QR code and capture video from the sidelines; the backend collects, synchronizes and processes the clips into match footage.",
+      "A lightweight, smartphone-based system for recording live sports matches, from soccer to rugby, using multiple volunteer devices. Spectators join a game session by scanning a QR code and capture video from the sidelines; the backend collects, synchronizes and processes the clips into match footage. PitchEye started as my senior project, but I kept building it after the showcase, and six months later it's close to being published.",
     features: [
       "Game sessions with unique codes and QR-code join flow",
       "Mobile app (Expo) with QR scanner and live-stream capture",
@@ -96,7 +96,7 @@ window.PROJECTS = [
       url: "https://www.youtube.com/live/Hr5QMd7XGTo",
     },
     demoUrl: "", // set once deployed, e.g. "https://pitcheye.vercel.app"
-    sourceUrl: "https://github.com/iadeyefa/PitchEye",
+    sourceUrl: "", // kept private on purpose: Luis plans to commercialize PitchEye
   },
   {
     id: "cruiseroad",
