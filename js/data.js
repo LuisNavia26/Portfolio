@@ -16,7 +16,7 @@ window.PROFILE = {
   linkedin: "https://www.linkedin.com/in/lanavia26/",
   resumePdf: "assets/Luis_A_Navia_s_Resume.pdf",
   summary:
-    "Computer Science student at the University of Florida (graduating December 2026) who builds full-stack web and mobile apps, from React frontends to Django and Node.js backends, with real-time video and maps along the way. Before software, I led electrical diagnostics and full-vehicle wiring builds, which taught me to debug systematically and own a system end to end. Furthermore, I enjoy the outdoors, playing rugby, rowing, and curiosity overall.",
+    "Computer Science student at the University of Florida (graduating December 2026) who builds full-stack web and mobile apps. From React frontends to Django and Node.js backends, with real-time video and maps along the way. Before software, I led electrical diagnostics and full-vehicle wiring builds, which taught me to debug systematically and own a system end to end. Furthermore, I enjoy the outdoors, playing rugby, rowing, and curiosity overall.",
 
   experience: [
     {
