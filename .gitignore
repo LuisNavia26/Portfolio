@@ -9,3 +9,11 @@ Thumbs.db
 
 # Private project notes
 CLAUDE.md
+
+# Original phone/camera media (HEIC, CR2, MOV: too big, not web-friendly, may contain GPS).
+# Web-ready copies live in assets/media/.
+assets/Chevrolet/
+assets/Vw/
+assets/Rowing/
+assets/Rugby/
+assets/Outdoors/

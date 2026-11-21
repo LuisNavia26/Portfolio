@@ -18,6 +18,7 @@ function renderChrome(page) {
       <nav class="nav">
         ${link("index.html", "About", "home")}
         ${link("projects.html", "Projects", "projects")}
+        ${link("hobbies.html", "Hobbies", "hobbies")}
       </nav>
     </div></header>`
   );
@@ -77,7 +78,10 @@ function renderProjects(root) {
     return `<a class="project-card" href="project.html?id=${encodeURIComponent(pr.id)}">
       <div class="project-cover" ${cover}>${pr.image ? "" : esc(pr.name)}</div>
       <div class="project-body">
-        <span class="status ${pr.demoUrl ? "live" : ""}">${pr.demoUrl ? "● Live demo" : "Demo coming soon"}</span>
+        <div class="card-labels">
+          ${pr.category ? `<span class="category">${esc(pr.category)}</span>` : ""}
+          ${pr.hasDemo === false ? "" : `<span class="status ${pr.demoUrl ? "live" : ""}">${pr.demoUrl ? "● Live demo" : "Demo coming soon"}</span>`}
+        </div>
         <h3>${esc(pr.name)}</h3>
         <p>${esc(pr.tagline)}</p>
         ${tags(pr.stack.slice(0, 4))}
@@ -88,9 +92,104 @@ function renderProjects(root) {
   root.innerHTML = `
     <div class="hero" style="padding-bottom:24px">
       <h1>Projects</h1>
-      <p class="title">Pick a project to see what it does and try it out.</p>
+      <p class="title">Software I've built and hardware I've engineered. Pick one to see the details.</p>
     </div>
     <div class="projects-grid">${cards}</div>`;
+}
+
+// Photo/video gallery. Photos open full size in the lightbox; videos play inline.
+function mediaGrid(items) {
+  return `<div class="media-grid">${items
+    .map((m) =>
+      m.type === "video"
+        ? `<figure class="media-item"><video controls playsinline preload="none" poster="${esc(m.poster)}" src="${esc(m.src)}" aria-label="${esc(m.alt)}"></video></figure>`
+        : `<figure class="media-item"><button type="button" class="media-open" data-src="${esc(m.src)}" data-alt="${esc(m.alt)}" aria-label="View photo: ${esc(m.alt)}"><img src="${esc(m.thumb || m.src)}" alt="${esc(m.alt)}" loading="lazy" /></button></figure>`
+    )
+    .join("")}</div>`;
+}
+
+function mediaCount(items = []) {
+  const n = (t) => items.filter((m) => m.type === t).length;
+  const part = (k, word) => (k ? `${k} ${word}${k > 1 ? "s" : ""}` : "");
+  return [part(n("image"), "photo"), part(n("video"), "video")].filter(Boolean).join(" · ");
+}
+
+function renderHobbies(root) {
+  const hobbies = window.HOBBIES || [];
+  const overview = hobbies
+    .map(
+      (h) => `<a class="hobby-tile" href="#${esc(h.id)}" style="--tile-accent:${esc(h.accent)}">
+        <div class="hobby-tile-img" style="background-image:url('${esc(h.image)}')"></div>
+        <div class="hobby-tile-body"><h3>${esc(h.name)}</h3><span>${esc(mediaCount(h.media))}</span></div>
+      </a>`
+    )
+    .join("");
+  const sections = hobbies
+    .map(
+      (h) => `<section class="hobby" id="${esc(h.id)}" style="--accent:${esc(h.accent)}">
+        <div class="hobby-head">
+          <h2>${esc(h.name)}</h2>
+          <p>${esc(h.blurb)}</p>
+          ${h.details && h.details.length ? tags(h.details) : ""}
+        </div>
+        ${h.media && h.media.length ? mediaGrid(h.media) : ""}
+      </section>`
+    )
+    .join("");
+
+  root.innerHTML = `
+    <div class="hero" style="padding-bottom:24px">
+      <h1>Hobbies</h1>
+      <p class="title">What I'm up to when I'm not writing code.</p>
+    </div>
+    <div class="hobby-overview">${overview}</div>
+    ${sections}`;
+}
+
+// Lightbox for gallery photos: click to open, arrows or the arrow keys to browse,
+// Esc or a click outside the photo to close.
+function setupLightbox() {
+  let group = [], index = 0;
+  const box = document.createElement("div");
+  box.className = "lightbox";
+  box.hidden = true;
+  box.innerHTML = `<button type="button" class="lb-close" aria-label="Close">×</button>
+    <button type="button" class="lb-prev" aria-label="Previous photo">‹</button>
+    <figure><img alt="" /><figcaption></figcaption></figure>
+    <button type="button" class="lb-next" aria-label="Next photo">›</button>`;
+  document.body.appendChild(box);
+  const img = box.querySelector("img"), cap = box.querySelector("figcaption");
+
+  const show = (i) => {
+    index = (i + group.length) % group.length;
+    const b = group[index];
+    img.src = b.dataset.src;
+    img.alt = b.dataset.alt;
+    cap.textContent = b.dataset.alt;
+    box.querySelector(".lb-prev").hidden = box.querySelector(".lb-next").hidden = group.length < 2;
+  };
+  const close = () => { box.hidden = true; img.removeAttribute("src"); document.body.style.overflow = ""; };
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".media-open");
+    if (btn) {
+      group = [...btn.closest(".media-grid").querySelectorAll(".media-open")];
+      show(group.indexOf(btn));
+      box.hidden = false;
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    if (box.hidden) return;
+    if (e.target.closest(".lb-prev")) show(index - 1);
+    else if (e.target.closest(".lb-next")) show(index + 1);
+    else if (e.target.closest(".lb-close") || e.target === box) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (box.hidden) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") show(index - 1);
+    if (e.key === "ArrowRight") show(index + 1);
+  });
 }
 
 function renderProject(root) {
@@ -104,11 +203,27 @@ function renderProject(root) {
   document.title = `${pr.name} — ${window.PROFILE.name}`;
   document.documentElement.style.setProperty("--accent", pr.accent);
 
-  const demoBtn = pr.demoUrl
+  const hasDemo = pr.hasDemo !== false;
+  const demoBtn = !hasDemo
+    ? ""
+    : pr.demoUrl
     ? `<a class="btn primary" href="${esc(pr.demoUrl)}" target="_blank" rel="noopener">Open live demo ↗</a>`
     : `<a class="btn primary" aria-disabled="true">Live demo coming soon</a>`;
   const srcBtn = pr.sourceUrl
     ? `<a class="btn" href="${esc(pr.sourceUrl)}" target="_blank" rel="noopener">Source code</a>`
+    : "";
+  const ft = pr.fieldTest;
+  const streamBtn = ft
+    ? `<a class="btn" href="${esc(ft.url)}" target="_blank" rel="noopener">▶ Watch the stream ↗</a>`
+    : "";
+  const fieldTest = ft
+    ? `<section><h2>${esc(ft.title)}</h2>
+        <div class="card field-test">
+          <p>${esc(ft.text)}</p>
+          <div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ft.youtubeId)}" title="${esc(pr.name)}: ${esc(ft.title)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <a class="btn" href="${esc(ft.url)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        </div>
+      </section>`
     : "";
   const demo = pr.demoUrl
     ? `<iframe class="demo-frame" src="${esc(pr.demoUrl)}" title="${esc(pr.name)} demo" loading="lazy"></iframe>`
@@ -117,9 +232,10 @@ function renderProject(root) {
   root.innerHTML = `
     <a class="back" href="projects.html">← All projects</a>
     <div class="detail-hero">
+      ${pr.category ? `<span class="category">${esc(pr.category)}</span>` : ""}
       <h1>${esc(pr.name)}</h1>
       <p class="tagline">${esc(pr.tagline)}</p>
-      <div class="btn-row">${demoBtn}${srcBtn}</div>
+      ${demoBtn || streamBtn || srcBtn ? `<div class="btn-row">${demoBtn}${streamBtn}${srcBtn}</div>` : ""}
     </div>
     <section>
       <div class="detail-grid">
@@ -130,15 +246,18 @@ function renderProject(root) {
           <ul>${pr.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
         </div>
         <div class="stack">
-          <div class="card"><h2>Tech stack</h2>${tags(pr.stack)}</div>
+          <div class="card"><h2>${hasDemo ? "Tech stack" : "Skills"}</h2>${tags(pr.stack)}</div>
           ${pr.role ? `<div class="card"><h2>My role</h2><p style="margin:0">${esc(pr.role)}</p></div>` : ""}
         </div>
       </div>
     </section>
-    <section><h2>Try it</h2>${demo}</section>`;
+    ${fieldTest}
+    ${pr.media && pr.media.length ? `<section><h2>Gallery</h2>${mediaGrid(pr.media)}</section>` : ""}
+    ${hasDemo ? `<section><h2>Try it</h2>${demo}</section>` : ""}`;
 }
 
 const page = document.body.dataset.page;
 renderChrome(page);
 const root = document.getElementById("content");
-({ home: renderHome, projects: renderProjects, project: renderProject })[page](root);
+({ home: renderHome, projects: renderProjects, hobbies: renderHobbies, project: renderProject })[page](root);
+setupLightbox();

@@ -191,6 +191,19 @@ section h2 {
   color: var(--muted);
 }
 .status.live { color: #16a34a; }
+.card-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.category {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.detail-hero .category { margin-bottom: 10px; }
 
 /* Project detail */
 .back { display: inline-block; margin: 28px 0 0; color: var(--muted); text-decoration: none; }
@@ -217,3 +230,118 @@ section h2 {
 }
 
 .site-footer { padding: 40px 0; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 40px; }
+
+/* ---------- Hobbies: overview tiles + one section per hobby ---------- */
+.hobby-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.hobby-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  background: var(--tile-accent);
+}
+.hobby-tile-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 25%;
+  transition: transform 0.3s ease;
+}
+.hobby-tile:hover .hobby-tile-img { transform: scale(1.04); }
+.hobby-tile-body {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 40px 16px 14px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+}
+.hobby-tile-body h3 { margin: 0; font-size: 1.3rem; }
+.hobby-tile-body span { font-size: 0.85rem; opacity: 0.85; }
+
+.hobby { scroll-margin-top: 80px; }
+.hobby-head { border-left: 4px solid var(--accent); padding-left: 14px; margin-bottom: 16px; }
+.hobby .hobby-head h2 { margin: 0 0 4px; font-size: 1.6rem; text-transform: none; letter-spacing: -0.01em; color: var(--text); }
+.hobby-head p { margin: 0 0 10px; color: var(--muted); max-width: 680px; }
+
+/* ---------- Gallery grid (hobbies and project pages) ---------- */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.media-item {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--border);
+}
+.media-item img,
+.media-item video { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
+.media-item video { background: #000; }
+.media-open { all: unset; display: block; width: 100%; height: 100%; cursor: zoom-in; }
+.media-open:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.media-open img { transition: transform 0.25s ease; }
+.media-open:hover img { transform: scale(1.04); }
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.9);
+}
+.lightbox[hidden] { display: none; }
+.lightbox figure { margin: 0; max-width: min(1200px, 100%); text-align: center; }
+.lightbox img { max-width: 100%; max-height: 82vh; border-radius: 8px; }
+.lightbox figcaption { color: #ddd; margin-top: 10px; font-size: 0.95rem; }
+.lightbox button {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+.lightbox button:hover { background: rgba(255, 255, 255, 0.25); }
+.lightbox button[hidden] { display: none; }
+.lb-close { position: absolute; top: 16px; right: 16px; }
+@media (max-width: 640px) {
+  .hobby-overview { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hobby-tile { aspect-ratio: 3 / 4; }
+  .hobby-tile-body { padding: 24px 8px 8px; }
+  .hobby-tile-body h3 { font-size: 0.95rem; }
+  .hobby-tile-body span { display: none; }
+  .media-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .lb-prev, .lb-next { position: absolute; bottom: 24px; }
+  .lb-prev { left: calc(50% - 56px); }
+  .lb-next { right: calc(50% - 56px); }
+}
+
+/* ---------- Embedded video (e.g. PitchEye field test) ---------- */
+.field-test p { margin-top: 0; max-width: 680px; }
+.video-embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: 0 0 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
