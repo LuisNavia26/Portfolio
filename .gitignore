@@ -1,0 +1,11 @@
+.env
+.env.*
+node_modules/
+.DS_Store
+Thumbs.db
+.netlify/
+.vscode/
+*.log
+
+# Private project notes
+CLAUDE.md
