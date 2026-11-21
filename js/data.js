@@ -17,7 +17,7 @@ window.PROFILE = {
   photo: "assets/img/headshot.jpg", // round headshot next to the name (square crop of assets/Headshot.jpg)
   resumePdf: "assets/Luis_A_Navia_s_Resume.pdf",
   summary:
-    "Computer Science student at the University of Florida (graduating December 2026) who builds full-stack web and mobile apps. From React frontends to Django and Node.js backends, with real-time video and maps along the way. Before software, I led electrical diagnostics and full-vehicle wiring builds, which taught me to debug systematically and own a system end to end. Furthermore, I enjoy the outdoors, playing rugby, rowing, and curiosity overall.",
+    "Computer Science student at the University of Florida (graduating December 2026) who builds full-stack web and mobile apps. From React and React Native frontends to Django and Node.js backends, with live video streaming and maps along the way. Before software, I led electrical diagnostics and full-vehicle wiring builds, which taught me to debug systematically and own a system end to end. Furthermore, I enjoy the outdoors, playing rugby, rowing, and curiosity overall.",
 
   experience: [
     {
@@ -61,11 +61,10 @@ window.PROFILE = {
   ],
 
   skills: {
-    Languages: ["Python", "C++", "JavaScript", "TypeScript", "SQL (PostgreSQL)"],
-    Frameworks: ["React", "Node.js", "Express.js", "Django"],
-    "Data & Cloud": ["Supabase", "MongoDB", "Firebase", "Google Cloud Platform", "AWS"],
-    Technologies: ["FFmpeg", "WebRTC", "Google Maps Platform", "REST APIs"],
-    "Developer Tools": ["Git", "VS Code", "Visual Studio", "PyCharm", "IntelliJ", "CLion"],
+    Languages: ["Python", "C++", "JavaScript", "TypeScript", "SQL (PostgreSQL)", "Bash"],
+    Frameworks: ["React", "React Native (Expo)", "Django REST Framework", "Node.js", "Express.js"],
+    "Developer Tools": ["Git", "Docker", "Linux", "DigitalOcean", "Google Cloud Platform", "Android Studio", "VS Code", "Claude Code"],
+    Technologies: ["GStreamer", "FFmpeg", "WebRTC", "Mux", "Supabase", "REST APIs", "MongoDB", "Google Maps Platform"],
   },
 };
 
@@ -74,25 +73,24 @@ window.PROJECTS = [
     id: "pitcheye",
     name: "PitchEye",
     category: "Software Engineering",
-    tagline: "Record live sports matches with a crowd of phones.",
+    tagline: "Live multi-camera sports streaming from a crowd of phones.",
     accent: "#16a34a",
     image: null,
     summary:
-      "A lightweight, smartphone-based system for recording live sports matches, from soccer to rugby, using multiple volunteer devices. Spectators join a game session by scanning a QR code and capture video from the sidelines; the backend collects, synchronizes and processes the clips into match footage. PitchEye started as my senior project, but I kept building it after the showcase, and six months later it's close to being published.",
+      "A live multi-camera sports streaming platform. Android phones on the sidelines join a game by scanning a QR code and become camera angles; an operator watches sub-second WebRTC previews of every angle and picks the view everyone else sees, while a GStreamer live switcher cuts between angles at 30 fps. The stream is delivered through Mux with a YouTube simulcast. PitchEye started as a team senior project; after the showcase I kept going and rebuilt it almost entirely, and six months later it's close to being published.",
     features: [
-      "Game sessions with unique codes and QR-code join flow",
-      "Mobile app (Expo) with QR scanner and live-stream capture",
-      "Web dashboard for teams, live viewing and video uploads",
-      "Django backend for games, streams, teams and video processing",
-      "HLS / FLV playback in the browser",
+      "Android phones join a game as camera angles by scanning a QR code",
+      "GStreamer live switcher running at 30 fps",
+      "Operator view with sub-second WebRTC previews of every angle, choosing the view everyone else sees",
+      "Deployed with Docker and Mux, with a YouTube simulcast",
+      "React web app and React Native (Expo) mobile app on a Django REST backend with Supabase",
       "Field-tested streaming a live UF Rugby match against the Gainesville Hogs (D2)",
     ],
-    stack: ["Django", "Python", "C++", "React", "TypeScript", "Expo", "Supabase", "FFmpeg", "OpenCV", "WebRTC / RTMP", "Docker"],
-    role: "Built the login flow and the live feeds.",
+    stack: ["GStreamer", "WebRTC", "Django", "React Native", "React", "Python", "Mux", "Docker", "Supabase"],
     // First real-world test. Shown as a "Watch the stream" button and an embedded video.
     fieldTest: {
       title: "First field test",
-      text: "PitchEye was recently tested for the first time at a UF Rugby match against the Gainesville Hogs, a Division II team. The stream it produced is below.",
+      text: "PitchEye was recently tested for the first time at a UF Rugby match against the Gainesville Hogs, a Division II team, streaming live through Mux with a YouTube simulcast. The stream is below.",
       youtubeId: "Hr5QMd7XGTo",
       url: "https://www.youtube.com/live/Hr5QMd7XGTo",
     },
