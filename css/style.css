@@ -1,30 +1,61 @@
 :root {
-  --bg: #f7f7f5;
-  --surface: #ffffff;
-  --text: #1a1a1a;
-  --muted: #5f6368;
-  --border: #e4e4e0;
-  --accent: #2563eb;
+  /* Each page has its own theme, picked by <body data-page="...">.
+     Default (About page): creamy off-white. */
+  color-scheme: light;
+  --bg: #f5eedf;
+  --surface: #fffaf0;
+  --text: #2b2519;
+  --muted: #6e6553;
+  --border: #e3d8c2;
+  --accent: #1d4ed8;
   --radius: 14px;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow: 0 1px 2px rgba(60, 45, 20, 0.05), 0 8px 24px rgba(60, 45, 20, 0.08);
   --max: 1040px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1012;
-    --surface: #17181b;
-    --text: #ececec;
-    --muted: #9aa0a6;
-    --border: #2a2c30;
-    --accent: #60a5fa;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
-  }
+/* Projects grid + project pages: dark blue over the binary-code image. */
+body[data-page="projects"],
+body[data-page="project"] {
+  color-scheme: dark;
+  --bg: #050c2c;
+  --surface: rgba(8, 16, 48, 0.78);
+  --text: #eef2ff;
+  --muted: #a9b4d6;
+  --border: rgba(120, 150, 255, 0.2);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+/* Not set on project pages: there each project's own accent (set on <html> by site.js) is used. */
+body[data-page="projects"] { --accent: #60a5fa; }
+
+/* Hobbies: dark military green. */
+body[data-page="hobbies"] {
+  color-scheme: dark;
+  --bg: #262e1b;
+  --surface: #323c25;
+  --text: #eef0e0;
+  --muted: #b9bfa2;
+  --border: rgba(190, 205, 150, 0.18);
+  --accent: #a8bd6e;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+
+/* Projects pages: fixed full-screen background image (a pseudo-element, because
+   background-attachment: fixed doesn't work on iOS). */
+body[data-page="projects"]::before,
+body[data-page="project"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(3, 8, 30, 0.35), rgba(3, 8, 30, 0.55)),
+    url("../assets/img/bg.jpg") center / cover no-repeat,
+    var(--bg);
+}
 
 body {
   margin: 0;
@@ -74,6 +105,7 @@ a { color: inherit; }
 }
 .nav a:hover { color: var(--text); background: var(--border); }
 .nav a.active { color: var(--text); background: var(--surface); box-shadow: var(--shadow); }
+.card, .project-card { backdrop-filter: blur(6px); }
 
 /* Buttons */
 .btn {
@@ -345,3 +377,21 @@ section h2 {
   background: #000;
 }
 .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ---------- About page: headshot next to the name ---------- */
+.hero-top { display: flex; align-items: center; gap: 24px; margin-bottom: 8px; }
+.hero-top h1 { margin-bottom: 4px; }
+.hero-top .title { margin-bottom: 0; }
+.avatar {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  border: 4px solid var(--surface);
+  box-shadow: var(--shadow);
+}
+@media (max-width: 640px) {
+  .hero-top { gap: 16px; }
+  .avatar { width: 88px; height: 88px; border-width: 3px; }
+}

@@ -54,8 +54,13 @@ function renderHome(root) {
 
   root.innerHTML = `
     <div class="hero">
-      <h1>${esc(p.name)}</h1>
-      <p class="title">${esc(p.title)}</p>
+      <div class="hero-top">
+        ${p.photo ? `<img class="avatar" src="${esc(p.photo)}" alt="${esc(p.name)}" width="132" height="132" />` : ""}
+        <div>
+          <h1>${esc(p.name)}</h1>
+          <p class="title">${esc(p.title)}</p>
+        </div>
+      </div>
       <div class="meta"><span>${esc(p.location)}</span><span><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></span></div>
       <p class="summary">${esc(p.summary)}</p>
       <div class="btn-row">

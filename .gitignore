@@ -17,3 +17,8 @@ assets/Vw/
 assets/Rowing/
 assets/Rugby/
 assets/Outdoors/
+
+# Full-size original of the background (bg.jpg is the web copy)
+assets/img/rm378-07.jpg
+# Original headshot (web copy: assets/img/headshot.jpg, EXIF stripped)
+assets/Headshot.jpg
